@@ -205,6 +205,10 @@
       1788589895000000000,
       9073
     ],
+    "devops/hermes-automation/SKILL.md": [
+      1788593861811244538,
+      4660
+    ],
     "social-media/DESCRIPTION.md": [
       1788589895000000000,
       151
@@ -600,6 +604,22 @@
         "linux",
         "macos",
         "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "hermes-automation",
+      "category": "devops",
+      "frontmatter_name": "hermes-automation",
+      "description": "Cron jobs, backup scripts, and scheduled message delivery.",
+      "platforms": [
+        "linux"
       ],
       "conditions": {
         "fallback_for_toolsets": [],
