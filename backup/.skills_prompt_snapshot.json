@@ -6,20 +6,24 @@
       179
     ],
     "research/grounded-citations/SKILL.md": [
-      1788589895000000000,
-      11176
+      1788645867000000000,
+      12434
     ],
     "research/arxiv/SKILL.md": [
       1788589895000000000,
       10061
     ],
     "research/competitor-news-monitor/SKILL.md": [
-      1788589895000000000,
-      4501
+      1788645867000000000,
+      4618
     ],
     "research/llm-wiki/SKILL.md": [
       1788589895000000000,
       20121
+    ],
+    "research/rss-feeds/SKILL.md": [
+      1788645867000000000,
+      4557
     ],
     "productivity/DESCRIPTION.md": [
       1788589895000000000,
@@ -206,12 +210,16 @@
       9073
     ],
     "devops/hermes-automation/SKILL.md": [
-      1788593861811244538,
-      4660
+      1788682111874840053,
+      4238
     ],
     "social-media/DESCRIPTION.md": [
       1788589895000000000,
       151
+    ],
+    "social-media/reddit-reading/SKILL.md": [
+      1788645867000000000,
+      6279
     ],
     "social-media/xurl/SKILL.md": [
       1788589895000000000,
@@ -1073,6 +1081,42 @@
       "category": "research",
       "frontmatter_name": "llm-wiki",
       "description": "Karpathy's LLM Wiki: build/query interlinked markdown KB.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "rss-feeds",
+      "category": "research",
+      "frontmatter_name": "rss-feeds",
+      "description": "Read RSS, Atom, JSON feeds; discover feeds behind a page.",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "conditions": {
+        "fallback_for_toolsets": [],
+        "requires_toolsets": [],
+        "fallback_for_tools": [],
+        "requires_tools": [],
+        "session_platforms": []
+      }
+    },
+    {
+      "skill_name": "reddit-reading",
+      "category": "social-media",
+      "frontmatter_name": "reddit-reading",
+      "description": "Read Reddit: subreddits, search, threads, users. No browser.",
       "platforms": [
         "linux",
         "macos",

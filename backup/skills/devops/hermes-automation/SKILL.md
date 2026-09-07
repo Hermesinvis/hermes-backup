@@ -1,7 +1,7 @@
 ---
 name: hermes-automation
 description: "Cron jobs, backup scripts, and scheduled message delivery."
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux]
@@ -46,51 +46,6 @@ Procedures for cron jobs, backup scripts, scheduled delivery, and GitHub integra
 - **Timezone mismatch.** The Hermes cron system runs in UTC. For Iran time (UTC+3:30), 10:30 IRDT = 07:00 UTC. Use cron expressions in UTC, not local time.
 - **Git operations need HTTPS when port 22 is blocked.** Embed the token in the clone URL: `https://TOKEN@github.com/user/repo.git`. Set `git config --global user.name/email` before first commit.
 - **`no_agent` jobs require `script`.** Without a script, the job has nothing to run and silently does nothing. Agent jobs require `prompt`.
-
-## Backup Script Pattern
-
-For backing up Hermes data to GitHub:
-
-```bash
-#!/bin/bash
-set -e
-REPO_URL="https://TOKEN@github.com/user/repo.git"
-BACKUP_DIR="/tmp/hermes-backup-repo"
-HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S %Z')
-
-# Clone or pull
-cd "$BACKUP_DIR" 2>/dev/null && git pull --rebase origin main || \
-  git clone "$REPO_URL" "$BACKUP_DIR" && cd "$BACKUP_DIR"
-
-# Copy critical data
-mkdir -p backup/memories backup/skills
-cp -r "$HERMES_HOME/memories/"* backup/memories/ 2>/dev/null || true
-cp "$HERMES_HOME/config.yaml" backup/ 2>/dev/null || true
-cp "$HERMES_HOME/SOUL.md" backup/ 2>/dev/null || true
-find "$HERMES_HOME/skills" -name "SKILL.md" -exec bash -c '
-    dest="backup/skills/${0#$HERMES_HOME/skills/}"
-    mkdir -p "$(dirname "$dest")"
-    cp "$0" "$dest"' {} \;
-
-# Commit if changed
-git add -A
-git diff --cached --quiet || (git commit -m "Auto-backup: $TIMESTAMP" && git push)
-```
-
-Place scripts in `~/.hermes/scripts/` and reference them in cron jobs by relative path.
-
-## Agent-to-Telegram Direct Delivery (Fallback)
-
-When `deliver: origin` fails to reach Telegram (e.g., session conflict), bypass the Hermes delivery layer by sending directly via Telegram Bot API:
-
-```python
-import requests, json, os
-BOT_TOKEN = open(f'{os.path.expanduser("~")}/.hermes/.env').read()\
-    .split('TELEGRAM_BOT_TOKEN=')[1].split('\n')[0].strip()
-CHAT_ID = '8352373787'  # from ~/.hermes/channel_directory.json
-requests.post(f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage',
-    json={'chat_id': CHAT_ID, 'text': message, 'parse_mode': 'Markdown'})
-```
-
-Use this only as a fallback when Hermes delivery consistently fails.
+- **Persian/Farsi text in prompts triggers injection filter.** The `cronjob_manage` tool blocks prompts containing U+200C (zero-width non-joiner), which is essential for correct Persian rendering. Always write cron prompts in English and instruct the agent to output in the user's language. The cron agent runs fresh each tick and follows the prompt — a language instruction in English works fine.
+- **`continuity: true` causes exponential prompt bloat.** Each run nests the previous run's full output (including that run's nested output) inside the prompt. At frequent intervals (e.g., every 5m), context grows exponentially and buries the actual prompt instructions. Disable continuity for content-delivery jobs where deduplication is not needed: `cronjob_manage(action='update', job_id='...', continuity=False)`. Only enable continuity for jobs that genuinely need to see their own history (scouts, incremental digests).
+- **Agent content jobs must explicitly require tool use.** Without an explicit instruction like `You MUST use web_search`, the cron agent falls back to its own memory and produces stale, repeated, or fabricated content. Always include a concrete tool-use directive in the prompt for any job that needs fresh/real data per run.
