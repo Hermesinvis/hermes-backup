@@ -5,3 +5,5 @@ Amir's GitHub backup repo: Hermesinvis/hermes-backup. Backup script lives at ~/.
 Hermes cron delivery works via Telegram adapter — messages delivered to chat_id 8352373787. When user is actively chatting, cron messages may appear delayed or buried in the DM flow. Ticker heartbeat can go stale after gateway restarts; restart gateway to fix.
 §
 Backup script at /data/.hermes/scripts/hermes-backup.sh backs up memories, skills, config, SOUL.md to GitHub repo (Hermesinvis/hermes-backup) via HTTPS. Git global user: Hermes Backup / hermes-backup@bot. Port 22 blocked on this host — use HTTPS only.
+§
+Fun fact topics already sent (avoid repeating): Check session history for delivered facts before searching.
